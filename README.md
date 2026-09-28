@@ -109,15 +109,34 @@ seckill-plus/
 > - JDK17：`D:\JDK-17`
 > - Redis：`D:\Redis-x64-3.2.100\redis-server.exe`
 > - RocketMQ：`D:\rocketmq\rocketmq-all-5.5.1-bin-release`
-> - MySQL：`root`，默认口令 `4399`（可用环境变量 `SECKILL_DB_PASSWORD` 覆盖）
+> - MySQL：账号 `root`，口令**不入库**（见下方「数据库口令配置」）
 > - Node：v22（前端构建）
+
+### 5.1 数据库口令配置（口令绝不进 git）
+
+`user/goods/order` 三个服务的 `application.yml` 中 `spring.datasource.password` 一律是占位符
+`${SECKILL_DB_PASSWORD}`（**无明文默认值**），口令按场景提供：
+
+- **本机开发/测试**：仓库目录下留存 `src/main/resources/application-local.yml`（含 `spring.datasource.password` 的本机口令），
+  该文件已被 `.gitignore` 忽略；`application.yml` 声明 `spring.profiles.default: local`，本地启动零配置即生效。
+- **服务器/CI 部署**：注入环境变量 `SECKILL_DB_PASSWORD=xxxx`（优先级高于 profile 文件），无需 local 文件。
+- **集成测试**：测试类声明 `@ActiveProfiles({"test","local"})`，本机直接读取同一 local 文件；CI 无该文件时依赖环境变量。
+- 首次 clone 后的准备动作：手动创建上述 `application-local.yml`（模板如下，口令自填，勿提交）。
+
+```yaml
+# seckill-user/src/main/resources/application-local.yml（同名文件在 goods/order 各一份）
+spring:
+  datasource:
+    password: <你的数据库口令>
+```
 
 ```powershell
 # 1) 中间件（幂等，已运行会自动跳过）
 powershell -ExecutionPolicy Bypass -File scripts\start-redis.ps1
 powershell -ExecutionPolicy Bypass -File scripts\start-rocketmq.ps1
 
-# 2) 初始化三个数据库并灌种子数据（会重建表结构，仅限演示环境）
+# 2) 初始化三个数据库并灌种子数据（会重建表结构，仅限演示环境；口令走环境变量，不入库）
+$env:SECKILL_DB_PASSWORD='<你的数据库口令>'
 powershell -ExecutionPolicy Bypass -File scripts\init-db.ps1
 
 # 3) 构建（JDK17 + 项目内 .mvn-repo）

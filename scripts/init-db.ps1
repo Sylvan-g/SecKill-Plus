@@ -16,8 +16,13 @@ $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
 $mysqlUser = 'root'
-# 优先读环境变量（避免把口令写进 git 脚本）；缺省回退本机演示口令
-$mysqlPass = if ($env:SECKILL_DB_PASSWORD) { $env:SECKILL_DB_PASSWORD } else { '4399' }
+# 口令绝不入库：只允许环境变量提供，无明文兜底
+$mysqlPass = $env:SECKILL_DB_PASSWORD
+if (-not $mysqlPass) {
+    Write-Error "[init-db] 请先设置环境变量 SECKILL_DB_PASSWORD（数据库口令不入库，禁止明文兜底）。"
+    Write-Error "  示例: `$env:SECKILL_DB_PASSWORD='<你的数据库口令>'; powershell -ExecutionPolicy Bypass -File scripts\init-db.ps1"
+    exit 1
+}
 
 function Invoke-SqlFile([string]$file) {
     if (-not (Test-Path $file)) { throw "SQL file not found: $file" }
