@@ -1,0 +1,24 @@
+# ---------- 构建产物 ----------
+target/
+*.class
+.mvn-repo/
+
+# ---------- IDE ----------
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# ---------- 本地运行数据与日志（不入库） ----------
+logs/
+.rocketmq/
+*.log
+
+# ---------- 敏感/本机配置：含数据库密码等，禁止提交 ----------
+**/application-local.yml
+**/application-local.properties
+**/application-secret.yml
+
+**/SecKill-Plus\秒杀系统_SecKill-Plus_需求文档.md

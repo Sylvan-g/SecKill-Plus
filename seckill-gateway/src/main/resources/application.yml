@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: seckill-gateway
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+# 网关路由（需求文档 8 节路由约定：/api/** 按前缀转发，/internal/** 由过滤器统一拒绝）
+seckill:
+  gateway:
+    rest-timeout-ms: 5000
+    routes:
+      - prefix: /api/user/
+        target: ${USER_BASE_URL:http://localhost:8100}
+      - prefix: /api/goods/
+        target: ${GOODS_BASE_URL:http://localhost:8200}
+      - prefix: /api/seckill/
+        target: ${ORDER_BASE_URL:http://localhost:8300}
+      - prefix: /api/order/
+        target: ${ORDER_BASE_URL:http://localhost:8300}
+      - prefix: /api/admin/
+        target: ${SCHEDULER_BASE_URL:http://localhost:8400}
+    cors:
+      allowed-origins:
+        - ${GATEWAY_CORS_ORIGIN:http://localhost:5173}
+  # 分布式限流（需求 7.3/8.3/10.2/13 约定键 seckill.ratelimit.*，gateway 消费）：
+  # qps=单 IP 稳定速率（压测调高用环境变量 SECKILL_RATELIMIT_QPS）；capacity 缺省跟随 qps（无突发）
+  ratelimit:
+    enabled: true
+    qps: 200
+    scoped-paths:
+      - /api/seckill/**
+      - /api/order/pay/**

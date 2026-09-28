@@ -1,0 +1,37 @@
+# 集成测试 profile：连接本机真实 MySQL(seckill_order) + Redis + RocketMQ
+# 需先运行 scripts/init-db.ps1；MQ 未启动时 producer 仅打日志，不阻塞测试
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/seckill_order?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: ${SECKILL_DB_PASSWORD:4399}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+sa-token:
+  token-name: Authorization
+  token-prefix: Bearer
+  timeout: 86400
+  is-concurrent: true
+  is-share: true
+  is-read-cookie: false
+  is-read-header: true
+  is-log: false
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+
+seckill:
+  order:
+    pay-timeout-minutes: 30
+  mq:
+    name-server: ${ROCKETMQ_NAMESRV:localhost:9876}
+    topic-seckill: seckill-order-topic
+    producer-group: seckill-order-producer

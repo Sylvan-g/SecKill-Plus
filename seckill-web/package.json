@@ -1,0 +1,23 @@
+{
+  "name": "seckill-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "新果商城·超级闪购节 前端（Vue3 + Vite + Element Plus），需求文档 5.1 seckill-web",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "axios": "^1.7.2",
+    "element-plus": "^2.7.5",
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.2.11"
+  }
+}

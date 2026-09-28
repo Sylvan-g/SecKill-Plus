@@ -1,0 +1,48 @@
+server:
+  port: 8300
+
+spring:
+  application:
+    name: seckill-order
+  datasource:
+    url: jdbc:mysql://localhost:3306/seckill_order?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    # 口令不硬编码入 git：默认取环境变量，缺省使用本机演示口令
+    password: ${SECKILL_DB_PASSWORD:4399}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+sa-token:
+  token-name: Authorization
+  token-prefix: Bearer
+  timeout: 86400
+  is-concurrent: true
+  is-share: true
+  is-read-cookie: false
+  is-read-header: true
+  is-log: false
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+
+# 秒杀业务配置（需求文档 R4：30 分钟支付期限；3.4 超时取消）
+seckill:
+  order:
+    pay-timeout-minutes: 30
+  mq:
+    name-server: ${ROCKETMQ_NAMESRV:localhost:9876}
+    topic-seckill: seckill-order-topic
+    producer-group: seckill-order-producer
+    consumer-group: seckill-order-consumer
+    topic-timeout: seckill-order-timeout-topic
+    timeout-message-group: seckill-order-timeout-consumer
+  internal:
+    goods-base-url: ${GOODS_BASE_URL:http://localhost:8200}
+    user-base-url: ${USER_BASE_URL:http://localhost:8100}

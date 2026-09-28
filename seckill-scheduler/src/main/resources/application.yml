@@ -1,0 +1,15 @@
+server:
+  port: 8400
+
+spring:
+  application:
+    name: seckill-scheduler
+
+# 内部接口地址（scheduler 纯编排，无 DB/Redis/MQ 连接）
+seckill:
+  internal:
+    goods-base-url: ${GOODS_BASE_URL:http://localhost:8200}
+    order-base-url: ${ORDER_BASE_URL:http://localhost:8300}
+  scheduler:
+    # 超时扫描兜底周期（毫秒），默认 60s（3.5）
+    timeout-scan-fixed-delay-ms: 60000

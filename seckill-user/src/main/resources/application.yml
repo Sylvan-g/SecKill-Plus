@@ -1,0 +1,35 @@
+server:
+  port: 8100
+
+spring:
+  application:
+    name: seckill-user
+  datasource:
+    url: jdbc:mysql://localhost:3306/seckill_user?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    # 口令不硬编码入 git：默认取环境变量，缺省使用本机演示口令
+    password: ${SECKILL_DB_PASSWORD:4399}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+sa-token:
+  # token 放请求头 Authorization，值形如 "Bearer <token>"（需求文档 8.12/8.13）
+  token-name: Authorization
+  token-prefix: Bearer
+  timeout: 86400            # 会话有效期（秒）= 1 天；5 个服务必须保持一致
+  is-concurrent: true
+  is-share: true
+  is-read-cookie: false     # 前后端分离，只从请求头读取
+  is-read-header: true
+  is-log: false
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: auto

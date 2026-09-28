@@ -1,0 +1,29 @@
+# 集成测试 profile：连接本机真实 MySQL(seckill_goods) + Redis
+# 需先运行 scripts/init-db.ps1 保证库表存在（Ticket 3）
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/seckill_goods?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: ${SECKILL_DB_PASSWORD:4399}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+sa-token:
+  token-name: Authorization
+  token-prefix: Bearer
+  timeout: 86400
+  is-concurrent: true
+  is-share: true
+  is-read-cookie: false
+  is-read-header: true
+  is-log: false
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto

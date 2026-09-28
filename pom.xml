@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Seckill-Plus parent POM
+  - JDK 17, Spring Boot 3.2.x
+  - 包名顶层 com.xinguo（分组 com.xinguo）
+  - 6 个模块，见 spec 5.2
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.xinguo</groupId>
+    <artifactId>seckill-plus</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>seckill-plus</name>
+    <description>新果商城-闪购秒杀系统（微服务版）</description>
+
+    <modules>
+        <module>seckill-common</module>
+        <module>seckill-gateway</module>
+        <module>seckill-user</module>
+        <module>seckill-goods</module>
+        <module>seckill-order</module>
+        <module>seckill-scheduler</module>
+    </modules>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <!-- 统一管理在 T2 之后各服务会逐步引入的依赖版本（当前阶段仅 Spring Boot parent 已覆盖全部） -->
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- 统一管理 Spring Boot repackage 插件；可运行服务模块各自启用 -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
