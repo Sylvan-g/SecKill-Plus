@@ -22,3 +22,10 @@ logs/
 **/application-secret.yml
 
 **/秒杀系统_SecKill-Plus_需求文档.md
+
+# ---------- 前端依赖与构建产物（不入库） ----------
+seckill-web/node_modules/
+seckill-web/dist/
+
+# ---------- 压测动态产物（含登录 token，禁止提交） ----------
+scripts-压测/tokens.txt
